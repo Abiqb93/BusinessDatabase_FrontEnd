@@ -22,11 +22,13 @@
   "bugs": {
     "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
   },
-  "homepage": "https://demos.creative-tim.com/argon-dashboard-react/",
+  "homepage": "https://abiqb93.github.io/BusinessDatabase_FrontEnd/",
   "scripts": {
     "start": "react-scripts start",
     "build": "cross-env PUBLIC_URL=/ react-scripts build",
     "test": "react-scripts test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "compile:scss": "sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.css",
@@ -66,6 +68,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "gh-pages": "^6.3.0",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.9"
   },
