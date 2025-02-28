@@ -25,7 +25,7 @@
   "homepage": "https://abiqb93.github.io/BusinessDatabase_FrontEnd/",
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env PUBLIC_URL=/ react-scripts build",
+    "build": "cross-env PUBLIC_URL=https://abiqb93.github.io/BusinessDatabase_FrontEnd/ react-scripts build",
     "test": "react-scripts test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
