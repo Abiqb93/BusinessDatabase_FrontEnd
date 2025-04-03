@@ -56,6 +56,37 @@ const ContactDetails = () => {
     }
   };
 
+  const handleCopy = () => {
+    const info = `
+${company.first_name} ${company.last_name}
+${company.company_name}
+${company.category}
+${company.city}, ${company.country}
+Email: ${company.email}
+Phone: ${company.phone}
+    `;
+    navigator.clipboard.writeText(info.trim());
+    alert("Contact details copied to clipboard!");
+  };
+
+  const handleWhatsappShare = () => {
+    const text = encodeURIComponent(
+      `Contact Info:\n${company.first_name} ${company.last_name}\n${company.company_name}\n${company.email}\n${company.phone}`
+    );
+    window.open(`https://wa.me/?text=${text}`, "_blank");
+  };
+
+  const handleEmailShare = () => {
+    const subject = encodeURIComponent("Sharing Contact: " + company.company_name);
+    const body = encodeURIComponent(`
+Contact Name: ${company.first_name} ${company.last_name}
+Company: ${company.company_name}
+Email: ${company.email}
+Phone: ${company.phone}
+    `);
+    window.open(`mailto:?subject=${subject}&body=${body}`);
+  };
+
   return (
     <>
       <Header />
@@ -88,8 +119,8 @@ const ContactDetails = () => {
                     </p>
                     <p><strong>Phone:</strong> {company.phone}</p>
 
-                    {/* 💾 Save Contact & View Saved Contacts */}
-                    <div className="mb-3 d-flex gap-3">
+                    {/* 💾 Save & View */}
+                    <div className="mb-3 d-flex gap-3 flex-wrap">
                       <Button color="success" size="sm" onClick={handleSaveContact}>
                         💾 Save Contact
                       </Button>
@@ -99,6 +130,19 @@ const ContactDetails = () => {
                         onClick={() => navigate("/contactsdirectory")}
                       >
                         📁 View Saved Contacts
+                      </Button>
+                    </div>
+
+                    {/* 📤 Sharing Options */}
+                    <div className="mb-3 d-flex gap-3 flex-wrap">
+                      <Button color="info" size="sm" onClick={handleCopy}>
+                        📋 Copy
+                      </Button>
+                      <Button color="success" size="sm" onClick={handleWhatsappShare}>
+                        🟢 WhatsApp
+                      </Button>
+                      <Button color="primary" size="sm" onClick={handleEmailShare}>
+                        ✉️ Email
                       </Button>
                     </div>
 

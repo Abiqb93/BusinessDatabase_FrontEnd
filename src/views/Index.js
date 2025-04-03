@@ -97,7 +97,8 @@ const Index = () => {
   ));
 
   const handleSearch = async () => {
-    const baseUrl = "http://localhost:8080/api/companies";
+    // const baseUrl = "http://localhost:8080/api/companies";
+    const baseUrl = " https://horseracesbackend-production.up.railway.app/api/companies";
     const params = new URLSearchParams();
 
     if (searchQuery.trim()) params.append("query", searchQuery.trim());
