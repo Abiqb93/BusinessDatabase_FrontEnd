@@ -13,7 +13,6 @@ const countryToCode = {
   "Sweden": "SE", "Norway": "NO", "Denmark": "DK", "Switzerland": "CH", "Belgium": "BE"
 };
 
-// Get flag URL based on country name
 const getFlagUrl = (country) => {
   const code = countryToCode[country] || country;
   return `https://flagcdn.com/w40/${code.toLowerCase()}.png`;
@@ -33,8 +32,6 @@ const SearchResults = () => {
       localStorage.setItem("searchResults", JSON.stringify(location.state.searchResults));
     }
   }, [location.state]);
-
-  console.log("Final Search Results:", searchResults);
 
   const uniqueCountries = [...new Set(searchResults.map(item => item.country))];
 
@@ -94,8 +91,12 @@ const SearchResults = () => {
                         <th>Name</th>
                         <th>Company</th>
                         <th>Category</th>
+                        <th>Listing</th>
+                        <th>Region</th>
                         <th>Country</th>
                         <th>City</th>
+                        <th>Services</th>
+                        <th>Hours</th>
                         <th>Contact</th>
                       </tr>
                     </thead>
@@ -105,6 +106,8 @@ const SearchResults = () => {
                           <td>{company.first_name} {company.last_name}</td>
                           <td>{company.company_name}</td>
                           <td>{company.category}</td>
+                          <td>{company.listing_category || "-"}</td>
+                          <td>{company.region || "-"}</td>
                           <td>
                             <img
                               src={getFlagUrl(company.country)}
@@ -114,6 +117,10 @@ const SearchResults = () => {
                             {company.country}
                           </td>
                           <td>{company.city}</td>
+                          <td style={{ maxWidth: "180px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                            {company.services_offered}
+                          </td>
+                          <td>{company.operating_hours}</td>
                           <td>
                             <span
                               onClick={() => navigate("/contactdetails", { state: { company } })}

@@ -50,7 +50,7 @@
     "@nivo/radar": "^0.88.0",
     "ajv": "^8.16.0",
     "axios": "^1.8.1",
-    "bootstrap": "4.6.2",
+    "bootstrap": "^4.6.2",
     "chart.js": "2.9.4",
     "classnames": "2.3.2",
     "d3": "^7.9.0",
@@ -63,7 +63,7 @@
     "react-dom": "18.2.0",
     "react-router-dom": "6.21.1",
     "react-scripts": "5.0.1",
-    "reactstrap": "8.10.0",
+    "reactstrap": "^8.10.0",
     "sass": "1.69.5"
   },
   "devDependencies": {

@@ -8,15 +8,9 @@ import Icons from "views/examples/Icons.js";
 import SearchResults from "views/examples/searchresults.js";
 import ContactDetails from "views/examples/contactdetails.js";
 import RequestUpdate from "views/examples/requestupdate.js";
-import HorsesProfile from "views/examples/horseprofile.js";
-import TrainerProfile from "views/examples/trainerprofile.js";
-import OwnerProfile from "views/examples/ownerprofile.js";
-import JockeyProfile from "views/examples/jockeyprofile.js";
-import DamRadar from "views/examples/damradar.js";
-import OwnerRadar from "views/examples/ownerradar.js";
-import TrainerRadar from "views/examples/trainerradar.js";
-import JockeyRadar from "views/examples/jockeyradar.js";
-import HorseRadar from "views/examples/horseradar.js";
+import Advertise from "views/examples/advertise";
+import SavedContacts from "views/examples/savedcontacts";
+import Results from "views/examples/results";
 
 var routes = [
   {
@@ -51,7 +45,29 @@ var routes = [
     layout: "/admin",
   },
 
+  {
+    path: "/advertise",
+    name: "Advertize with us!",
+    icon: "ni ni-tv-2 text-primary",
+    component: <Advertise />,
+    layout: "/admin",
+  },
 
+  {
+    path: "/contactsdirectory",
+    name: "Contacts Directory",
+    icon: "ni ni-tv-2 text-primary",
+    component: <SavedContacts />,
+    layout: "/admin",
+  },
+
+  {
+    path: "/results", 
+    name: "Race Results",
+    icon: "ni ni-tv-2 text-primary",
+    component: <Results />,
+    layout: "/admin",
+  },
   // {
   //   path: "/icons",
   //   name: "Icons",
