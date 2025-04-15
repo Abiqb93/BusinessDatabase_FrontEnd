@@ -26,31 +26,14 @@ import banner2 from "assets/images/banner2.jpg";
 import banner3 from "assets/images/banner3.jpg";
 
 const items = [
-  {
-    src: banner1,
-    altText: "Ad 1",
-    caption: ""
-  },
-  {
-    src: banner2,
-    altText: "Ad 2",
-    caption: ""
-  },
-  {
-    src: banner3,
-    altText: "Ad 3",
-    caption: ""
-  }
+  { src: banner1, altText: "Ad 1", caption: "" },
+  { src: banner2, altText: "Ad 2", caption: "" },
+  { src: banner3, altText: "Ad 3", caption: "" }
 ];
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
-
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [animating, setAnimating] = useState(false);
-
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
   const [filters, setFilters] = useState({
     firstName: "",
     lastName: "",
@@ -59,9 +42,17 @@ const Index = () => {
     country: "",
     listingCategory: "",
     region: "",
-    servicesOffered: "",
-    operatingHours: ""
+    servicesOffered: ""
   });
+
+  const navigate = useNavigate();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [animating, setAnimating] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
+  // ✅ Toggle between environments
+  // const baseUrl = "http://localhost:8080/api/companies";
+  const baseUrl = "https://horseracesbackend-production.up.railway.app/api/companies";
 
   const next = () => {
     if (animating) return;
@@ -90,15 +81,13 @@ const Index = () => {
         src={item.src}
         alt={item.altText}
         className="d-block w-100"
-        style={{ maxHeight: "400px", objectFit: "cover" }}
+        style={{ maxHeight: "250px", objectFit: "cover" }}
       />
       <CarouselCaption captionText={item.caption} captionHeader="" />
     </CarouselItem>
   ));
 
   const handleSearch = async () => {
-    // const baseUrl = "http://localhost:8080/api/companies";
-    const baseUrl = " https://horseracesbackend-production.up.railway.app/api/companies";
     const params = new URLSearchParams();
 
     if (searchQuery.trim()) params.append("query", searchQuery.trim());
@@ -109,8 +98,6 @@ const Index = () => {
 
     try {
       const response = await axios.get(`${baseUrl}?${params.toString()}`);
-      console.log("Fetched Data:", response.data);
-
       if (response.data.length === 0) {
         alert("No results found. Try another search term.");
       }
@@ -123,17 +110,38 @@ const Index = () => {
     }
   };
 
+  const handleInputChange = async (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    if (value.trim().length > 1) {
+      try {
+        // ✅ Toggle between environments
+        // const suggestionUrl = `http://localhost:8080/api/companies/suggestions?query=${value}`;
+        const suggestionUrl = `https://horseracesbackend-production.up.railway.app/api/companies/suggestions?query=${value}`;
+
+        const response = await axios.get(suggestionUrl);
+        setSuggestions(response.data.slice(0, 5));
+      } catch (err) {
+        console.error("Suggestion fetch error:", err);
+        setSuggestions([]);
+      }
+    } else {
+      setSuggestions([]);
+    }
+  };
+
   return (
     <>
       {/* 🔁 Carousel for Advertisement */}
-      <Carousel activeIndex={activeIndex} next={next} previous={previous}>
+      <Carousel activeIndex={activeIndex} next={next} previous={previous} className="mb-2">
         <CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={goToIndex} />
         {slides}
         <CarouselControl direction="prev" directionText="Previous" onClickHandler={previous} />
         <CarouselControl direction="next" directionText="Next" onClickHandler={next} />
       </Carousel>
 
-      <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
+      <Container className="d-flex flex-column justify-content-center align-items-center mt-2">
         <Row className="w-100 justify-content-center">
           <Col md="10" lg="8">
             <Card className="shadow p-4 text-center">
@@ -142,24 +150,46 @@ const Index = () => {
                   Find contacts for the Thoroughbred Racing & Breeding Industry
                 </CardTitle>
 
-                {/* 🔍 Basic Search */}
-                <div className="d-flex w-100">
+                {/* 🔍 Basic Search with Suggestions */}
+                <div style={{ position: "relative", width: "100%" }}>
                   <Input
                     type="text"
                     placeholder="Search Directory..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleInputChange}
                     className="form-control me-2"
-                    style={{ flex: 1, fontSize: "1rem", padding: "10px" }}
+                    style={{ fontSize: "1rem", padding: "10px" }}
                   />
-                  <Button
-                    color="primary"
-                    onClick={handleSearch}
-                    style={{ fontSize: "1rem", padding: "10px 16px" }}
-                  >
-                    Search
-                  </Button>
+                  {suggestions.length > 0 && (
+                    <ul
+                      className="list-group position-absolute w-100"
+                      style={{ zIndex: 1000 }}
+                    >
+                      {suggestions.map((sug, idx) => (
+                        <li
+                          key={idx}
+                          className="list-group-item list-group-item-action"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            setSearchQuery(sug);
+                            setSuggestions([]);
+                          }}
+                        >
+                          {sug}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
+
+                <Button
+                  color="primary"
+                  onClick={handleSearch}
+                  className="mt-3"
+                  style={{ fontSize: "1rem", padding: "10px 16px" }}
+                >
+                  Search
+                </Button>
 
                 {/* 🔽 Toggle Advanced Search */}
                 <Button
@@ -181,8 +211,7 @@ const Index = () => {
                       { label: "Country", key: "country" },
                       { label: "Listing Category", key: "listingCategory" },
                       { label: "Region", key: "region" },
-                      { label: "Services Offered", key: "servicesOffered" },
-                      { label: "Operating Hours", key: "operatingHours" }
+                      { label: "Services Offered", key: "servicesOffered" }
                     ].map((field) => (
                       <Col md="6" key={field.key}>
                         <FormGroup className="mb-2">
@@ -199,12 +228,7 @@ const Index = () => {
                       </Col>
                     ))}
                     <Col xs="12" className="text-end">
-                      <Button
-                        size="sm"
-                        color="success"
-                        onClick={handleSearch}
-                        className="mt-2"
-                      >
+                      <Button size="sm" color="success" onClick={handleSearch} className="mt-2">
                         Search with Filters
                       </Button>
                     </Col>
@@ -213,24 +237,14 @@ const Index = () => {
 
                 {/* 📢 Advertise With Us */}
                 <div className="text-center mt-4">
-                  <Button
-                    color="warning"
-                    outline
-                    size="sm"
-                    onClick={() => navigate("/advertise")}
-                  >
+                  <Button color="warning" outline size="sm" onClick={() => navigate("/advertise")}>
                     📢 Advertise With Us
                   </Button>
                 </div>
 
                 {/* 🏇 View Race Results */}
                 <div className="text-center mt-3">
-                  <Button
-                    color="info"
-                    outline
-                    size="sm"
-                    onClick={() => navigate("/results")}
-                  >
+                  <Button color="info" outline size="sm" onClick={() => navigate("/results")}>
                     🏇 View Race Results
                   </Button>
                 </div>

@@ -33,7 +33,7 @@ const SavedContacts = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Container className="mt-5" fluid>
         <Row className="justify-content-center">
           <Col md="10">

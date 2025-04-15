@@ -89,7 +89,7 @@ Phone: ${company.phone}
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Container className="mt-5" fluid>
         <Row className="justify-content-center">
           <Col md="8">

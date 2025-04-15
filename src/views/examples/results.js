@@ -76,7 +76,7 @@ const Results = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Container className="mt-5">
         <Card className="shadow p-4">
           <CardBody>
